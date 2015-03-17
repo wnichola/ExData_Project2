@@ -15,17 +15,14 @@ total_pm25_baltimore <- NEI %>%
     filter(fips == "24510", year >= "1999" & year <= "2008") %>% 
     group_by(year, type) %>% summarize(total_pm25 = sum(Emissions))
 
-total_pm25_baltimore$Year <- as.integer(total_pm25_baltimore$year)
+total_pm25_baltimore$Year <- as.factor(as.integer(total_pm25_baltimore$year))
 total_pm25_baltimore$type <- as.factor(total_pm25_baltimore$type)
-rge <- range(total_pm25_baltimore$total_pm25)
 
-qplot(total_pm25_baltimore$Year, total_pm25_baltimore$total_pm25, 
-     data=total_pm25_baltimore, 
-     facets = total_pm25_baltimore$type,
-     xlab="Year", ylab="PM2.5 (tons)", 
-     ylim=rge,
-     main="Total PM2.5 - Baltimore (tons) By Year", 
-     type="l", col="black")
+ggplot(data=total_pm25_baltimore, 
+       aes(x=Year, y=total_pm25, group=type, color=type)) + 
+    geom_line(size=1) +
+    xlab("Year") + ylab ("PM2.5 (tons)") + 
+    ggtitle("Total PM2.5 (tons) - By Year (Baltimore)")
 
-
-# Yes, but there was a jump in 2005
+# All types of sources have seen decreases in emissions, except for POINT that have seen
+# an increase from 1999 to 2005 before dropping to a level slightly higher than in 1999
