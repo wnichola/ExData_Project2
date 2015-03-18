@@ -25,9 +25,14 @@ if (!file.exists(targetURL)) {
 NEI <- readRDS("./summarySCC_PM25.rds")
 SCC <- readRDS("./Source_Classification_Code.rds")
 
-veh_related_scc <- filter(SCC, grepl("vehicle", tolower(SCC.Level.Two))) %>% 
-    select(SCC, Data.Category, Short.Name, EI.Sector, SCC.Level.One, 
-           SCC.Level.Two, SCC.Level.Three, SCC.Level.Four)
+## Retrieve the SCC for Mobile and Vehicles
+# I interpreted the question based on motor vehicles implies all vehicles, 
+# regardless of light or heavyg duty, but excludes all non-road equipment, aircraft
+# marine vessels, locomotives (train?), and other. Thus all the SCC with 
+# EI.Sector having the words Mobile and Vehicles would be relevant
+
+veh_related_scc <- filter(SCC, grepl("mobile.*vehicle", tolower(EI.Sector))) %>% 
+    select(SCC)
 
 ttl_pm25_veh_by_year <- 
     filter(NEI, fips == "24510" | fips == "06037", 
@@ -56,10 +61,8 @@ dev.off()
 # Relative to LA, Baltimore have maintained lower vehicle emissions over 1999 to 2008,
 # and during this period have a constant drop in emissions.  However, Los Angeles County,
 # have seen high increases in ON-ROAD sources from 1999 until 2005, and dropping to
-# a level just slightly higher than 1999 levels.  Whereas in NON-ROAD sources, there
-# was a increase in 2002, but then have seen a constain drop in emissions since then to
-# a level slightly above 1999 levels.  For POINT emissions, the level of emissions 
-# have been constant and significantly lower than both ON-ROAD and NON-ROAD sources.
+# a level just slightly higher than 1999 levels.  
+#  
 # In comparison between the two counties, Los Angeles would have the greatest changes
 # over time in motor vehicle emissions - in both high increases and dramatic decreases.
 # But the Los Angeles County level is comparitively much higher than those in Baltimore

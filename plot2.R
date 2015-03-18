@@ -33,7 +33,7 @@ total_pm25_baltimore$Year <- as.integer(total_pm25_baltimore$year)
 png(filename = output, width=480, height=480, units="px", bg="transparent")
 
 plot(total_pm25_baltimore$Year, total_pm25_baltimore$total_pm25, 
-     data=total_pm25_baltimore, xlab="Year", ylab="PM2.5 (tons)", 
+     data=total_pm25_baltimore, xlab="Year", ylab="PM2.5 (tons)", col="red",
      main="Total PM2.5 - Baltimore (tons) By Year", type="b", xaxt="n")
 axis(1, at=seq(1999, 2008, by=3))
 

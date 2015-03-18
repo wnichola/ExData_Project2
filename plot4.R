@@ -24,8 +24,14 @@ if (!file.exists(targetURL)) {
 NEI <- readRDS("./summarySCC_PM25.rds")
 SCC <- readRDS("./Source_Classification_Code.rds")
 
-coal_comb_related_scc <- filter(SCC, grepl("coal", tolower(SCC.Level.Three))) %>% 
+## Retrieve the SCC for Fuel Comb using coal
+# I interpreted the question based on Coal Comb implies coal is used as a fuel
+# and thus all the SCC with EI.Sector having the words Fuel Comb and Coal would
+# be relevant
+
+coal_comb_related_scc <- filter(SCC, grepl("fuel comb.*coal", tolower(EI.Sector))) %>% 
     select(SCC)
+
 ttl_pm25_coal_comb_by_year <- filter(NEI, SCC %in% coal_comb_related_scc$SCC) %>%
     group_by(year, type) %>% summarize(total_pm25 = sum(Emissions))
 
